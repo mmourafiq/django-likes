@@ -1,0 +1,59 @@
+{% load like_tags %}
+{% load friends_tags %}
+{% people_like_this cal 2 %}	
+{% for u in liker_list %}
+<div class="clearfix comment_li">
+	<a class="picto-avatar" href="{{ u.user.get_profile.get_absolute_url }}" data-analytic="profile" data-tooltip="user">
+	<img src="{{ u.user.get_profile.attachment_profile }}" alt="Profile picture {{ u.user.username }}" />	
+	</a>	
+	<div class="reply">   	
+		<a href="{{ u.user.get_profile.get_absolute_url }}">
+			<strong>{{u.user.username}}</strong>
+		</a> 	
+	</div>	
+	{% if u.user != user %}
+		{% relation_buttons user u.user %}
+	{% endif %}
+</div>
+{% endfor %}
+{% block extra_content %}
+	<script type="text/javascript">
+	$(function(){		
+		$('.button_friends a').click(function(){
+			$.ajax({
+		    url: $(this).attr('href'),
+		    type: 'POST',
+		    datatype: 'json',
+		    data: {'csrfmiddlewaretoken': '{{ csrf_token }}',},
+		    success:function(data) {      		
+	            if (data.success == true) {
+					$('#likes').dialog('close'); 		 			        	            	                                    	                	              
+	            }           
+	    	 }
+		   });	
+		   return false;	 
+		});	
+		$("form#cancel").submit(function(f){
+			f.preventDefault();		
+			var submit_form = $(f.target);	    
+			$.ajax({
+				url: submit_form.attr('action'),
+				type: submit_form.attr('method'),
+				data: submit_form.serialize(),
+				dataType: 'json',
+				success: function(json){
+				      // code to update DOM here			  	 				      	    		
+		      		if (json.success){						
+						$('#likes').dialog('close');	      			      			
+		      		}
+				    },
+			    error: function(xhr, ajaxOptions, thrownError){
+								
+				     // log ajax errors.
+    			}
+		  		});
+		  });				
+	})
+	
+	</script>
+{% endblock%}

@@ -1,0 +1,44 @@
+{% load like_tags %}
+{% load friends_tags %}
+{% people_like_this cal 2 %}	
+{% for u in liker_list %}
+<div class="clearfix comment_li">
+	<a class="avatar" href="{% url profiles_profile_detail u.user.id %}" data-analytic="profile" data-tooltip="user">
+	<img src="{{ u.user.get_profile.attachment_profile }}" alt="Profile picture {{ u.user.username }}" />	
+	</a> 
+	<div class="reply">   	
+		<a href="{% url profiles_profile_detail u.user.id %}">
+			<strong>{{u.user.username}}</strong>
+		</a> 	
+	</div>	
+	{% if u.user != user %}
+	<div class="right_button">		
+		<div class="button_friends">
+			{% if_friends user.id u.user.id %}
+				<a class="small grey awesome" href="{{ u.user|remove_relationship_url:message }}"> - {{ message }}</a>
+			{% else %}
+				<a class="small blue awesome" href="{{	u.user|add_relationship_url:"request" }}"> + request</a>
+				<a class="small blue awesome" href="{{	u.user|add_relationship_url:"follow" }}"> >> follow</a>
+			{% endif_friends %}
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endfor %}
+{% block extra_content %}
+	<script type="text/javascript">
+		$(function(){
+			$("div.button_friends .btn_remove").button({
+			    icons: {
+                	primary: "ui-icon-minus"
+            	}
+			})
+			$("div.button_friends .btn_add").button({
+			    icons: {
+                	primary: "ui-icon-plus"
+            	}
+			})
+		})
+	
+	</script>
+{% endblock%}

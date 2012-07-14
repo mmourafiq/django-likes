@@ -1,0 +1,6 @@
+{% load like_tags %}
+
+{% like_count cal 2 %}					
+	{% if count > 0 %}	
+		{{ count }}	<i class="icon-heart"></i>			
+	{% endif %}

@@ -1,0 +1,71 @@
+{% load like_tags %}
+{% load friends_tags %}
+{% people_like_this cal 2 %}	
+{% for u in liker_list %}
+<div class="clearfix comment_li row">
+	<div class="span-1">	
+		<a class="thumbnail" href="{{ u.user.get_profile.get_absolute_url }}" data-analytic="profile" data-tooltip="user">	
+		{% if not u.user.get_profile.attachment_profile %}
+			<img src="/media/profile.png" alt="cal picture" class="cal-picture"></img>		
+		{% else %}			
+			<img src="{{ u.user.get_profile.attachment_profile }}" alt="Profile picture {{ u.user.username }}" />
+		{% endif %}		
+		</a>
+	</div>	
+	<div class="span2">   	
+		<a href="{{ u.user.get_profile.get_absolute_url }}">
+			<strong>{{u.user.username}}</strong>
+		</a> 	
+	</div>	
+	{% if user.is_authenticated %}	
+		{% if u.user != user %}
+		<div class="right_button">		
+		<div class="button_friends">
+			{% relation_buttons user u.user %}
+		</div>
+		</div>
+		{% endif %}
+	{% endif %}
+</div>
+{% endfor %}
+{% block extra_content %}
+	<script type="text/javascript">
+	$(function(){		
+		$('.button_friends a').click(function(){
+			$.ajax({
+		    url: $(this).attr('href'),
+		    type: 'POST',
+		    datatype: 'json',
+		    data: {'csrfmiddlewaretoken': '{{ csrf_token }}',},
+		    success:function(data) {      		
+	            if (data.success == true) {
+					$('#likes').dialog('close'); 		 			        	            	                                    	                	              
+	            }           
+	    	 }
+		   });	
+		   return false;	 
+		});	
+		$("form#cancel").submit(function(f){
+			f.preventDefault();		
+			var submit_form = $(f.target);	    
+			$.ajax({
+				url: submit_form.attr('action'),
+				type: submit_form.attr('method'),
+				data: submit_form.serialize(),
+				dataType: 'json',
+				success: function(json){
+				      // code to update DOM here			  	 				      	    		
+		      		if (json.success){						
+						$('#likes').dialog('close');	      			      			
+		      		}
+				    },
+			    error: function(xhr, ajaxOptions, thrownError){
+								
+				     // log ajax errors.
+    			}
+		  		});
+		  });				
+	})
+	
+	</script>
+{% endblock%}

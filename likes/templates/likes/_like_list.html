@@ -1,0 +1,13 @@
+{% load like_tags %}
+
+{% people_like_this target 2 %}
+	
+	{% for u in liker_list %}
+		<div class="clearfix comment_li row">	
+			<div class="span2">   	
+				<a href="{{ u.user.get_profile.get_absolute_url }}">
+					<strong>{{u.user.username}}</strong>
+				</a> 	
+			</div>	
+		</div>
+	{% endfor %}
