@@ -1,13 +1,4 @@
 # -*- coding: utf-8 -*-
-'''
-Created on May 01, 2011
-
-@author: Mourad Mourafiq
-
-@copyright: Copyright © 2011
-
-other contributers:
-'''
 from django.utils.translation import ugettext_lazy as _
 from django import template
 from django.core.urlresolvers import reverse

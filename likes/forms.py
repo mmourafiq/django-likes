@@ -1,14 +1,4 @@
 # -*- coding: utf-8 -*-
-'''
-Created on May 01, 2011
-
-@author: Mourad Mourafiq
-
-@copyright: Copyright © 2011
-
-other contributers:
-'''
-
 import datetime
 from django import forms
 from django.conf import settings
